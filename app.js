@@ -51,6 +51,8 @@
     doneNewDeckBtn: document.getElementById('doneNewDeckBtn'),
   };
 
+  const STORAGE_KEY = 'flashcards.session.v1';
+
   const state = {
     allCards: [],
     deck: [],
@@ -61,6 +63,35 @@
     missed: 0,
     frontMode: 'spanish',
   };
+
+  function saveState() {
+    if (!state.allCards.length) return;
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        allCards: state.allCards,
+        deck: state.deck,
+        correct: state.correct,
+        missed: state.missed,
+        frontMode: state.frontMode,
+      }));
+    } catch (_) { /* storage may be unavailable */ }
+  }
+
+  function clearSavedState() {
+    try { localStorage.removeItem(STORAGE_KEY); } catch (_) {}
+  }
+
+  function loadSavedState() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return null;
+      const data = JSON.parse(raw);
+      if (!data || !Array.isArray(data.allCards) || !data.allCards.length) return null;
+      return data;
+    } catch (_) {
+      return null;
+    }
+  }
 
   function parseDeck(text) {
     const cards = [];
@@ -95,11 +126,32 @@
     els.study.classList.remove('hidden');
   }
 
+  function resumeSession(saved) {
+    state.allCards = saved.allCards.slice();
+    state.deck = saved.deck.slice();
+    state.correct = saved.correct || 0;
+    state.missed = saved.missed || 0;
+    state.frontMode = saved.frontMode || 'spanish';
+    if (els.frontSide.querySelector(`option[value="${state.frontMode}"]`)) {
+      els.frontSide.value = state.frontMode;
+    }
+    state.current = null;
+    els.setup.classList.add('hidden');
+    if (state.deck.length === 0) {
+      finishSession();
+    } else {
+      els.done.classList.add('hidden');
+      els.study.classList.remove('hidden');
+      nextCard();
+    }
+  }
+
   function resetSession() {
     state.deck = state.allCards.slice();
     state.correct = 0;
     state.missed = 0;
     state.current = null;
+    saveState();
     nextCard();
   }
 
@@ -174,12 +226,14 @@
     const idx = state.deck.indexOf(state.current);
     if (idx !== -1) state.deck.splice(idx, 1);
     state.correct++;
+    saveState();
     nextCard();
   }
 
   function markWrong() {
     if (!state.current || !state.revealed) return;
     state.missed++;
+    saveState();
     nextCard();
   }
 
@@ -189,6 +243,7 @@
     els.done.classList.remove('hidden');
     els.doneTotal.textContent = state.allCards.length;
     els.doneMissed.textContent = state.missed;
+    saveState();
   }
 
   function backToSetup() {
@@ -196,6 +251,10 @@
     els.done.classList.add('hidden');
     els.setup.classList.remove('hidden');
     setStatus('');
+    clearSavedState();
+    state.allCards = [];
+    state.deck = [];
+    state.current = null;
   }
 
   els.fileInput.addEventListener('change', async (e) => {
@@ -251,6 +310,12 @@
     }
   });
   els.doneNewDeckBtn.addEventListener('click', backToSetup);
+
+  const saved = loadSavedState();
+  if (saved) {
+    resumeSession(saved);
+    setStatus(`Resumed previous session (${saved.deck.length} cards remaining).`, 'success');
+  }
 
   document.addEventListener('keydown', (e) => {
     if (els.study.classList.contains('hidden')) return;
