@@ -12,6 +12,5 @@ Year humans first landed on the Moon | 1969
 Currency of Japan | Yen
 Chemical symbol for gold | Au
 Smallest prime number | 2
-What are the major types of intellgence? | HUMINT, SIGINT, OSINT, RUMINT
 
 
