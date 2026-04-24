@@ -1,27 +1,19 @@
 (() => {
   'use strict';
 
+  const MAX_SIDE_LENGTH = 200;
+
   const SAMPLE_DECK = [
-    'endulzar | to sweeten',
-    'hablar | to speak',
-    'comer | to eat',
-    'beber | to drink',
-    'leer | to read',
-    'escribir | to write',
-    'dormir | to sleep',
-    'caminar | to walk',
-    'correr | to run',
-    'aprender | to learn',
-    'ensenar | to teach',
-    'casa | house',
-    'perro | dog',
-    'gato | cat',
-    'libro | book',
-    'agua | water',
-    'manzana | apple',
-    'feliz | happy',
-    'triste | sad',
-    'rojo | red',
+    'What is the capital of France? | Paris',
+    'H2O | Water',
+    'Largest planet in our solar system | Jupiter',
+    'Author of "Hamlet" | William Shakespeare',
+    'Speed of light (m/s, approx) | 299,792,458',
+    'Square root of 144 | 12',
+    'Year humans first landed on the Moon | 1969',
+    'Currency of Japan | Yen',
+    'Chemical symbol for gold | Au',
+    'Smallest prime number | 2',
   ];
 
   const els = {
@@ -51,7 +43,7 @@
     doneNewDeckBtn: document.getElementById('doneNewDeckBtn'),
   };
 
-  const STORAGE_KEY = 'flashcards.session.v1';
+  const STORAGE_KEY = 'flashcards.session.v2';
 
   const state = {
     allCards: [],
@@ -61,7 +53,7 @@
     revealed: false,
     correct: 0,
     missed: 0,
-    frontMode: 'spanish',
+    frontMode: 'front',
   };
 
   function saveState() {
@@ -95,17 +87,22 @@
 
   function parseDeck(text) {
     const cards = [];
+    const skipped = { tooLong: 0, malformed: 0 };
     const lines = text.split(/\r?\n/);
     for (const raw of lines) {
       const line = raw.trim();
       if (!line || line.startsWith('#')) continue;
       const idx = line.indexOf('|');
-      if (idx === -1) continue;
-      const spanish = line.slice(0, idx).trim();
-      const english = line.slice(idx + 1).trim();
-      if (spanish && english) cards.push({ spanish, english });
+      if (idx === -1) { skipped.malformed++; continue; }
+      const front = line.slice(0, idx).trim();
+      const back = line.slice(idx + 1).trim();
+      if (!front || !back) { skipped.malformed++; continue; }
+      if (front.length > MAX_SIDE_LENGTH || back.length > MAX_SIDE_LENGTH) {
+        skipped.tooLong++; continue;
+      }
+      cards.push({ front, back });
     }
-    return cards;
+    return { cards, skipped };
   }
 
   function setStatus(msg, kind = '') {
@@ -115,7 +112,7 @@
 
   function startSession(cards) {
     if (!cards.length) {
-      setStatus('No valid cards found. Each line should be: spanish | english', 'error');
+      setStatus(`No valid cards found. Each line should be: front | back (max ${MAX_SIDE_LENGTH} chars per side).`, 'error');
       return;
     }
     state.allCards = cards.slice();
@@ -131,7 +128,7 @@
     state.deck = saved.deck.slice();
     state.correct = saved.correct || 0;
     state.missed = saved.missed || 0;
-    state.frontMode = saved.frontMode || 'spanish';
+    state.frontMode = saved.frontMode || 'front';
     if (els.frontSide.querySelector(`option[value="${state.frontMode}"]`)) {
       els.frontSide.value = state.frontMode;
     }
@@ -177,13 +174,13 @@
 
   function currentSides() {
     const card = state.current;
-    let showSpanishFirst;
-    if (state.frontMode === 'spanish') showSpanishFirst = true;
-    else if (state.frontMode === 'english') showSpanishFirst = false;
-    else showSpanishFirst = Math.random() < 0.5;
-    return showSpanishFirst
-      ? { front: card.spanish, back: card.english }
-      : { front: card.english, back: card.spanish };
+    let showFrontFirst;
+    if (state.frontMode === 'front') showFrontFirst = true;
+    else if (state.frontMode === 'back') showFrontFirst = false;
+    else showFrontFirst = Math.random() < 0.5;
+    return showFrontFirst
+      ? { front: card.front, back: card.back }
+      : { front: card.back, back: card.front };
   }
 
   function renderCard() {
@@ -192,6 +189,8 @@
     state.current._sides = sides;
     els.frontText.textContent = sides.front;
     els.backText.textContent = sides.back;
+    els.frontText.parentElement.classList.toggle('long', sides.front.length > 80);
+    els.backText.parentElement.classList.toggle('long', sides.back.length > 80);
     els.card.classList.remove('flipped');
     els.cardHint.textContent = 'Click card to flip';
     els.correctBtn.disabled = true;
@@ -257,14 +256,21 @@
     state.current = null;
   }
 
+  function describeSkipped(skipped) {
+    const parts = [];
+    if (skipped.tooLong) parts.push(`${skipped.tooLong} skipped (over ${MAX_SIDE_LENGTH} chars)`);
+    if (skipped.malformed) parts.push(`${skipped.malformed} skipped (malformed)`);
+    return parts.length ? ' — ' + parts.join(', ') : '';
+  }
+
   els.fileInput.addEventListener('change', async (e) => {
     const file = e.target.files && e.target.files[0];
     if (!file) return;
     try {
       const text = await file.text();
-      const cards = parseDeck(text);
-      setStatus(`Loaded ${cards.length} card${cards.length === 1 ? '' : 's'} from ${file.name}.`, 'success');
-      startSession(cards);
+      const { cards, skipped } = parseDeck(text);
+      setStatus(`Loaded ${cards.length} card${cards.length === 1 ? '' : 's'} from ${file.name}${describeSkipped(skipped)}.`, cards.length ? 'success' : 'error');
+      if (cards.length) startSession(cards);
     } catch (err) {
       setStatus('Could not read file: ' + err.message, 'error');
     } finally {
@@ -273,18 +279,18 @@
   });
 
   els.loadSampleBtn.addEventListener('click', () => {
-    const cards = parseDeck(SAMPLE_DECK.join('\n'));
+    const { cards } = parseDeck(SAMPLE_DECK.join('\n'));
     setStatus(`Loaded sample deck with ${cards.length} cards.`, 'success');
     startSession(cards);
   });
 
   els.loadPasteBtn.addEventListener('click', () => {
-    const cards = parseDeck(els.pasteArea.value);
+    const { cards, skipped } = parseDeck(els.pasteArea.value);
     if (!cards.length) {
       setStatus('No valid cards found in pasted text.', 'error');
       return;
     }
-    setStatus(`Loaded ${cards.length} cards.`, 'success');
+    setStatus(`Loaded ${cards.length} cards${describeSkipped(skipped)}.`, 'success');
     startSession(cards);
   });
 

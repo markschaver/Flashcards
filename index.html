@@ -3,20 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Spanish Flash Cards</title>
+<title>Flash Cards</title>
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 <main class="app">
   <header>
-    <h1>Spanish Flash Cards</h1>
+    <h1>Flash Cards</h1>
   </header>
 
   <section id="setup" class="panel">
     <h2>Load your deck</h2>
     <p class="hint">
-      Load a pipe-delimited file (<code>spanish | english</code>), one pair per line.
-      Lines starting with <code>#</code> are ignored.
+      Load a pipe-delimited file (<code>front | back</code>), one pair per line.
+      Each side can be up to 200 characters. Lines starting with <code>#</code> are ignored.
     </p>
 
     <div class="row">
@@ -29,7 +29,7 @@
 
     <details class="paste">
       <summary>Or paste cards here</summary>
-      <textarea id="pasteArea" rows="6" placeholder="endulzar | to sweeten&#10;hablar | to speak"></textarea>
+      <textarea id="pasteArea" rows="6" placeholder="term | definition&#10;question | answer"></textarea>
       <button id="loadPasteBtn" type="button">Load pasted cards</button>
     </details>
 
@@ -38,8 +38,8 @@
       <label>
         Show first:
         <select id="frontSide">
-          <option value="spanish">Spanish</option>
-          <option value="english">English</option>
+          <option value="front">Front (column 1)</option>
+          <option value="back">Back (column 2)</option>
           <option value="random">Random per card</option>
         </select>
       </label>

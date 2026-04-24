@@ -1,24 +1,17 @@
-# Sample Spanish flash card deck
-# Format: spanish | english
+# Sample flash card deck
+# Format: front | back  (each side up to 200 characters)
 # Lines starting with # are ignored.
 
-endulzar | to sweeten
-hablar | to speak
-comer | to eat
-beber | to drink
-leer | to read
-escribir | to write
-dormir | to sleep
-caminar | to walk
-correr | to run
-aprender | to learn
-casa | house
-perro | dog
-gato | cat
-libro | book
-agua | water
-manzana | apple
-feliz | happy
-triste | sad
-rojo | red
-azul | blue
+What is the capital of France? | Paris
+H2O | Water
+Largest planet in our solar system | Jupiter
+Author of "Hamlet" | William Shakespeare
+Speed of light (m/s, approx) | 299,792,458
+Square root of 144 | 12
+Year humans first landed on the Moon | 1969
+Currency of Japan | Yen
+Chemical symbol for gold | Au
+Smallest prime number | 2
+What are the major types of intellgence? | HUMINT, SIGINT, OSINT, RUMINT
+
+
