@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spanish Flash Cards</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<main class="app">
+  <header>
+    <h1>Spanish Flash Cards</h1>
+  </header>
+
+  <section id="setup" class="panel">
+    <h2>Load your deck</h2>
+    <p class="hint">
+      Load a pipe-delimited file (<code>spanish | english</code>), one pair per line.
+      Lines starting with <code>#</code> are ignored.
+    </p>
+
+    <div class="row">
+      <label class="file-label">
+        <input type="file" id="fileInput" accept=".txt,.csv,text/plain">
+        <span>Choose file&hellip;</span>
+      </label>
+      <button id="loadSampleBtn" type="button" class="secondary">Use sample deck</button>
+    </div>
+
+    <details class="paste">
+      <summary>Or paste cards here</summary>
+      <textarea id="pasteArea" rows="6" placeholder="endulzar | to sweeten&#10;hablar | to speak"></textarea>
+      <button id="loadPasteBtn" type="button">Load pasted cards</button>
+    </details>
+
+    <fieldset class="options">
+      <legend>Options</legend>
+      <label>
+        Show first:
+        <select id="frontSide">
+          <option value="spanish">Spanish</option>
+          <option value="english">English</option>
+          <option value="random">Random per card</option>
+        </select>
+      </label>
+    </fieldset>
+
+    <p id="loadStatus" class="status" role="status" aria-live="polite"></p>
+  </section>
+
+  <section id="study" class="panel hidden">
+    <div class="stats">
+      <span>Remaining: <strong id="remainingCount">0</strong></span>
+      <span>Correct: <strong id="correctCount">0</strong></span>
+      <span>Missed: <strong id="missedCount">0</strong></span>
+    </div>
+
+    <div id="card" class="card" tabindex="0" role="button" aria-label="Flash card. Click or press space to flip.">
+      <div class="card-inner">
+        <div class="card-face card-front"><span id="frontText"></span></div>
+        <div class="card-face card-back"><span id="backText"></span></div>
+      </div>
+      <p class="card-hint" id="cardHint">Click card to flip</p>
+    </div>
+
+    <div class="actions">
+      <button id="wrongBtn" type="button" class="wrong" disabled>Got it Wrong</button>
+      <button id="correctBtn" type="button" class="correct" disabled>Got it Right</button>
+    </div>
+
+    <div class="actions secondary-row">
+      <button id="restartBtn" type="button" class="secondary">Restart session</button>
+      <button id="newDeckBtn" type="button" class="secondary">Load different deck</button>
+    </div>
+  </section>
+
+  <section id="done" class="panel hidden">
+    <h2>All done!</h2>
+    <p>You correctly guessed every card in the deck.</p>
+    <div class="stats">
+      <span>Cards: <strong id="doneTotal">0</strong></span>
+      <span>Misses logged: <strong id="doneMissed">0</strong></span>
+    </div>
+    <div class="actions secondary-row">
+      <button id="doneRestartBtn" type="button">Study again</button>
+      <button id="doneNewDeckBtn" type="button" class="secondary">Load different deck</button>
+    </div>
+  </section>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>

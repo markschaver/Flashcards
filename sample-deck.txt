@@ -1,0 +1,24 @@
+# Sample Spanish flash card deck
+# Format: spanish | english
+# Lines starting with # are ignored.
+
+endulzar | to sweeten
+hablar | to speak
+comer | to eat
+beber | to drink
+leer | to read
+escribir | to write
+dormir | to sleep
+caminar | to walk
+correr | to run
+aprender | to learn
+casa | house
+perro | dog
+gato | cat
+libro | book
+agua | water
+manzana | apple
+feliz | happy
+triste | sad
+rojo | red
+azul | blue
