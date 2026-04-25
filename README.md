@@ -1,4 +1,4 @@
-# Flash-cards
+# Flashcards
 
 A Claude-built no-install flashcard app for studying any subject.
 
