@@ -23,13 +23,12 @@
   <section id="setup" class="panel">
     <h2>Load your deck</h2>
     <p class="hint">
-      Load a pipe-delimited file (<code>front | back</code>), one pair per line.
-      Each side can be up to 200 characters. Lines starting with <code>#</code> are ignored.
+      Accepts pipe-, tab-, or comma-delimited files. Each line is two columns divided by the delimiter. Maximum 200 characters per side. Lines starting with <code>#</code> are ignored.
     </p>
 
     <div class="row">
       <label class="file-label">
-        <input type="file" id="fileInput" accept=".txt,.csv,text/plain">
+        <input type="file" id="fileInput" accept=".txt,.csv,.tsv,text/plain,text/csv,text/tab-separated-values">
         <span>Choose file&hellip;</span>
       </label>
       <button id="loadSampleBtn" type="button" class="secondary">Use sample deck</button>

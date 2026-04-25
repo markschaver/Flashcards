@@ -113,6 +113,44 @@
     }
   }
 
+  function splitCsvRow(line) {
+    const fields = [];
+    let cur = '';
+    let inQuotes = false;
+    for (let i = 0; i < line.length; i++) {
+      const c = line[i];
+      if (inQuotes) {
+        if (c === '"') {
+          if (line[i + 1] === '"') { cur += '"'; i++; }
+          else inQuotes = false;
+        } else cur += c;
+      } else {
+        if (c === '"') inQuotes = true;
+        else if (c === ',') { fields.push(cur); cur = ''; }
+        else cur += c;
+      }
+    }
+    fields.push(cur);
+    return fields;
+  }
+
+  function splitLine(line) {
+    if (line.includes('\t')) {
+      const idx = line.indexOf('\t');
+      return [line.slice(0, idx), line.slice(idx + 1)];
+    }
+    if (line.includes('|')) {
+      const idx = line.indexOf('|');
+      return [line.slice(0, idx), line.slice(idx + 1)];
+    }
+    if (line.includes(',')) {
+      const fields = splitCsvRow(line);
+      if (fields.length < 2) return null;
+      return [fields[0], fields.slice(1).join(',')];
+    }
+    return null;
+  }
+
   function parseDeck(text) {
     const cards = [];
     const skipped = { tooLong: 0, malformed: 0 };
@@ -120,10 +158,10 @@
     for (const raw of lines) {
       const line = raw.trim();
       if (!line || line.startsWith('#')) continue;
-      const idx = line.indexOf('|');
-      if (idx === -1) { skipped.malformed++; continue; }
-      const front = line.slice(0, idx).trim();
-      const back = line.slice(idx + 1).trim();
+      const parts = splitLine(line);
+      if (!parts) { skipped.malformed++; continue; }
+      const front = parts[0].trim();
+      const back = parts[1].trim();
       if (!front || !back) { skipped.malformed++; continue; }
       if (front.length > MAX_SIDE_LENGTH || back.length > MAX_SIDE_LENGTH) {
         skipped.tooLong++; continue;
