@@ -1,6 +1,6 @@
 :root {
-  --bg-from: #f8fafc;
-  --bg-to: #e0e7ff;
+  --bg-from: #f1f1f1;
+  --bg-to: #f1f1f1;
   --panel: #ffffff;
   --panel-2: #e2e8f0;
   --panel-2-hover: #cbd5e1;
@@ -58,8 +58,8 @@
 }
 
 :root[data-theme="light"] {
-  --bg-from: #f8fafc;
-  --bg-to: #e0e7ff;
+  --bg-from: #f1f1f1;
+  --bg-to: #f1f1f1;
   --panel: #ffffff;
   --panel-2: #e2e8f0;
   --panel-2-hover: #cbd5e1;
