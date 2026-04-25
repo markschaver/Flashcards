@@ -2,7 +2,9 @@
 
 A Claude-built no-install flashcard app for studying any subject. It runs entirely in the browser — no server, no build step.
 
-## Run it
+Try it at https://schaver.com/flashcards/
+
+## Run it on your computer
 
 Download the files and open [`index.html`](index.html) in any modern browser. That's it.
 
@@ -38,7 +40,7 @@ Three ways to load cards:
 2. **Or paste cards here** — expand the section and paste delimited text directly.
 3. **Use sample deck** — loads a built-in 10-card trivia deck so you can try the app immediately.
 
-The [`Decks/`](Decks/) folder contains ready-to-use Spanish vocabulary decks in `.txt`, `.tsv`, and `.csv` form.
+The [`Decks/`](Decks/) folder contains ready-to-use vocabulary decks with the 2,000 [most frequently used words in the Spanish language](https://www.amazon.com/Frequency-Dictionary-Spanish-Routledge-Dictionaries/dp/1138686549/ref=sr_1_1).
 
 ## Studying
 

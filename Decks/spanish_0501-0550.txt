@@ -1,0 +1,50 @@
+profesor | professor, teacher
+resultado | result, outcome
+detener | to stop, detain
+solamente | only
+sufrir | to suffer, undergo
+importar | to matter, import
+pregunta | question
+ocupar | to occupy, use
+señora | Mrs., lady, madam
+representar | to represent
+investigación | investigation
+repetir | to repeat
+autor | writer, author
+caminar | to walk
+gastos | expense, outlay
+favor | favor, benefit
+vos | you (subj-sg/+fam)
+silencio | silence
+viaje | travel, trip
+natural | natural
+cerrar | to close
+resto | rest, remainder, leftover
+comunidad | community
+faltar | to be lacking
+mesa | table, board
+indicar | to indicate
+función | function, meeting
+vender | to sell
+supuesto | supposed; por s.: of course
+libertad | freedom, liberty
+organización | organization
+peso | peso (money), weight, load
+diferencia | difference
+rojo | red
+acordar | to remember, remind
+ambos | both
+elemento | element
+seguridad | security, safety
+cuestión | question, matter
+miembro | member, limb
+duda | doubt
+desear | to want, desire, wish for
+película | movie, film
+dato | data, fact
+región | region
+sector | sector, area, section
+militar | military
+dentro | inside
+iniciar | to initiate, start
+destacar | to emphasize, stand out
