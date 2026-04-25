@@ -1,4 +1,4 @@
-# Sample flash card deck
+# Sample flashcard deck
 # Format: front | back  (each side up to 200 characters)
 # Lines starting with # are ignored.
 
