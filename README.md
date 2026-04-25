@@ -40,7 +40,7 @@ Three ways to load cards:
 2. **Or paste cards here** — expand the section and paste delimited text directly.
 3. **Use sample deck** — loads a built-in 10-card trivia deck so you can try the app immediately.
 
-The [`Decks/`](Decks/) folder contains ready-to-use vocabulary decks with the 2,000 [most frequently used words in the Spanish language](https://www.amazon.com/Frequency-Dictionary-Spanish-Routledge-Dictionaries/dp/1138686549/ref=sr_1_1).
+The [`Decks/`](Decks/) folder contains ready-to-use vocabulary decks with the 2,000 [most frequently used words in Spanish](https://www.amazon.com/Frequency-Dictionary-Spanish-Routledge-Dictionaries/dp/1138686549/ref=sr_1_1).
 
 ## Studying
 
