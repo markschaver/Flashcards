@@ -4,7 +4,7 @@ A Claude-built no-install flashcard app for studying any subject. It runs entire
 
 ## Run it
 
-Open [`index.html`](index.html) in any modern browser. That's it.
+Download the files and open [`index.html`](index.html) in any modern browser. That's it.
 
 If you'd rather serve it locally:
 
