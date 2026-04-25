@@ -41,7 +41,35 @@
     doneMissed: document.getElementById('doneMissed'),
     doneRestartBtn: document.getElementById('doneRestartBtn'),
     doneNewDeckBtn: document.getElementById('doneNewDeckBtn'),
+    themePicker: document.getElementById('themePicker'),
   };
+
+  const THEME_KEY = 'flashcards.theme';
+
+  function applyTheme(choice) {
+    if (choice === 'light' || choice === 'dark') {
+      document.documentElement.setAttribute('data-theme', choice);
+    } else {
+      document.documentElement.removeAttribute('data-theme');
+    }
+  }
+
+  function initTheme() {
+    let saved = 'system';
+    try {
+      const v = localStorage.getItem(THEME_KEY);
+      if (v === 'light' || v === 'dark' || v === 'system') saved = v;
+    } catch (_) {}
+    els.themePicker.value = saved;
+    applyTheme(saved);
+    els.themePicker.addEventListener('change', () => {
+      const v = els.themePicker.value;
+      applyTheme(v);
+      try { localStorage.setItem(THEME_KEY, v); } catch (_) {}
+    });
+  }
+
+  initTheme();
 
   const STORAGE_KEY = 'flashcards.session.v2';
 
