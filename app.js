@@ -253,11 +253,20 @@
     if (!state.current) return;
     const sides = currentSides();
     state.current._sides = sides;
+    const cardInner = els.card.querySelector('.card-inner');
+    const wasFlipped = els.card.classList.contains('flipped');
+    if (wasFlipped && cardInner) {
+      cardInner.style.transition = 'none';
+      els.card.classList.remove('flipped');
+      void cardInner.offsetWidth;
+      cardInner.style.transition = '';
+    } else {
+      els.card.classList.remove('flipped');
+    }
     els.frontText.textContent = sides.front;
     els.backText.textContent = sides.back;
     els.frontText.parentElement.classList.toggle('long', sides.front.length > 80);
     els.backText.parentElement.classList.toggle('long', sides.back.length > 80);
-    els.card.classList.remove('flipped');
     els.cardHint.textContent = 'Click card to flip';
     els.correctBtn.disabled = true;
     els.wrongBtn.disabled = true;
