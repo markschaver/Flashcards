@@ -1,7 +1,7 @@
 (() => {
   'use strict';
 
-  const MAX_SIDE_LENGTH = 200;
+  const MAX_SIDE_LENGTH = 300;
 
   const SAMPLE_DECK = [
     'What is the capital of France? | Paris',
