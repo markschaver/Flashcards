@@ -191,7 +191,7 @@
 
   function resumeSession(saved) {
     state.allCards = saved.allCards.slice();
-    state.deck = saved.deck.slice();
+    state.deck = shuffle(saved.deck.slice());
     state.correct = saved.correct || 0;
     state.missed = saved.missed || 0;
     state.frontMode = saved.frontMode || 'front';
@@ -210,7 +210,7 @@
   }
 
   function resetSession() {
-    state.deck = state.allCards.slice();
+    state.deck = shuffle(state.allCards.slice());
     state.correct = 0;
     state.missed = 0;
     state.current = null;
@@ -218,11 +218,23 @@
     nextCard();
   }
 
-  function pickRandomIndex(len, avoid) {
-    if (len <= 1) return 0;
-    let idx = Math.floor(Math.random() * len);
-    if (idx === avoid) idx = (idx + 1) % len;
-    return idx;
+  function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  // Move the current card to a random spot in the back half of the queue,
+  // so a missed card returns later in the session but never immediately.
+  function requeueCurrent() {
+    const idx = state.deck.indexOf(state.current);
+    if (idx !== -1) state.deck.splice(idx, 1);
+    const len = state.deck.length;
+    const minPos = Math.ceil(len / 2);
+    const pos = minPos + Math.floor(Math.random() * (len - minPos + 1));
+    state.deck.splice(pos, 0, state.current);
   }
 
   function nextCard() {
@@ -230,9 +242,7 @@
       finishSession();
       return;
     }
-    const prevIdx = state.current ? state.deck.indexOf(state.current) : -1;
-    const idx = pickRandomIndex(state.deck.length, prevIdx);
-    state.current = state.deck[idx];
+    state.current = state.deck[0];
     state.flipped = false;
     state.revealed = false;
     renderCard();
@@ -306,6 +316,7 @@
 
   function markWrong() {
     if (!state.current || !state.revealed) return;
+    requeueCurrent();
     state.missed++;
     saveState();
     nextCard();
